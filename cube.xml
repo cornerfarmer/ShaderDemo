@@ -30,12 +30,59 @@
 	gx_camera.set_keyboard_speed(keyboard_speed)
 
 	cube_size = 1
-    mesh_cube = gh_mesh.create_torus(1, 0.4, 20) 
-	
-	for i=1, gh_object.get_num_vertices(mesh_cube) do
-	  gh_mesh.set_vertex_color(mesh_cube, i-1, 1, 0.5, 0.5, 1)
-	end
-	
+  local demo_dir = gh_utils.get_scenegraph_dir() 		
+  local model_directory = demo_dir .. "/Assets/" 
+  model = gh_model.create_from_file_loader_obj("Lamppost.obj", model_directory, model_directory)
+  street = gh_model.create_from_file_loader_obj("road.obj", model_directory, model_directory)
+  sidewalk = gh_model.create_from_file_loader_obj("sidewalk.obj", model_directory, model_directory)
+  wall = gh_model.create_from_file_loader_obj("wall.obj", model_directory, model_directory)
+  if (model > 0) then
+    gh_model.load_textures(model, model_directory)
+    
+    gh_object.set_materials_texture_unit_offset(model, 0)
+
+    gh_object.set_position(model, 3, 0.2, 0)
+    gh_object.set_euler_angles(model, 0, 0, 0)
+    gh_object.set_scale(model, 0.3,  0.3,  0.3)
+  
+    gh_object.compute_faces_normal(model)
+    gh_object.compute_vertices_normal(model)
+  end  
+  if (street > 0) then
+    gh_model.load_textures(street, model_directory)
+    gh_object.set_materials_texture_unit_offset(street, 0)
+
+    gh_object.set_position(street, -2, 0, 0)
+    gh_object.set_euler_angles(street, 0, 0, 0)
+    gh_object.set_scale(street, 1,  1,  1)
+  
+    gh_object.compute_faces_normal(street)
+    gh_object.compute_vertices_normal(street)
+  end  
+  if (sidewalk > 0) then
+    gh_model.load_textures(sidewalk, model_directory)
+    gh_object.set_materials_texture_unit_offset(sidewalk, 0)
+
+    gh_object.set_position(sidewalk, 4, 0, 0)
+    gh_object.set_euler_angles(sidewalk, 0, 0, 0)
+    gh_object.set_scale(sidewalk, 1,  1,  1)
+  
+    gh_object.compute_faces_normal(sidewalk)
+    gh_object.compute_vertices_normal(sidewalk)
+  end  
+  if (wall > 0) then
+    gh_model.load_textures(wall, model_directory)
+    gh_object.set_materials_texture_unit_offset(wall, 0)
+
+    gh_object.set_position(wall, 6, 2, 0)
+    gh_object.set_euler_angles(wall, 0, 0, 0)
+    gh_object.set_scale(wall, 1,  1,  1)
+  
+    gh_object.compute_faces_normal(wall)
+    gh_object.compute_vertices_normal(wall)
+  end  
+
+
 	grid = gh_utils.grid_create()
     gh_utils.grid_set_geometry_params(grid, 10, 10, 20, 20)
 	
@@ -61,7 +108,7 @@ last_time = elapsed_time
 
 		gx_camera.update(camera, dt)
 		gh_camera.bind(camera) 
-
+    
 	gh_renderer.clear_color_depth_buffers(0.2, 0.2, 0.2, 1.0, 1.0)
 	gh_renderer.set_depth_test_state(1)
 	 
@@ -71,10 +118,15 @@ last_time = elapsed_time
 	gh_gpu_program.bind(shader_prog)
 	  gh_gpu_program.uniform4f(shader_prog, "lightSource", 1, 0.4, 0.8, 0) 
     gh_gpu_program.uniform4f(shader_prog, "camera", gh_camera.get_view(camera)) 
-	 
+	 gh_gpu_program.uniform1i(shader_prog, "tex0", 0)
+   
 	-- Render the triangle and the grid
 	--
-	gh_object.render(mesh_cube)
+  gh_object.render(model)
+  gh_object.render(street)
+  gh_object.render(sidewalk)
+  gh_object.render(wall)
+
 	gh_object.render(grid)
 
 		]]></raw_data>
