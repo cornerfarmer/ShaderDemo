@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
 
 <glsl_hacker>
-	
-  <window name="cube" title="Cube" 
-          width="800" height="400"
+
+  <window name="cube" title="Cube"
+          width="1920" height="1080"
           gl_version_major="2" gl_version_minor="1" />
- 
- 
-	<script name="init_scene" run_mode="INIT" >
-		<raw_data>
-    <![CDATA[	
+
+
+  <script name="init_scene" run_mode="INIT" >
+    <raw_data>
+      <![CDATA[	
 
 	lib_dir = gh_utils.get_scripting_libs_dir() 		
 	dofile(lib_dir .. "lua/gx_cam_lib_v1.lua")
@@ -47,8 +47,6 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
     gh_object.set_euler_angles(model, 0, 0, 0)
     gh_object.set_scale(model, 1,  1,  1)
   
-    gh_object.compute_faces_normal(model)
-    gh_object.compute_vertices_normal(model)
   end  
   if (street > 0) then
     gh_model.load_textures(street, model_directory)
@@ -91,8 +89,6 @@ if (box > 0) then
     gh_object.set_euler_angles(box, 180, 0, 0)
     gh_object.set_scale(box, 2.3,  2.3,  2.3)
   
-    gh_object.compute_faces_normal(box)
-    gh_object.compute_vertices_normal(box)
   end  
   if (aircondition > 0) then
     gh_model.load_textures(aircondition, model_directory)
@@ -102,8 +98,6 @@ if (box > 0) then
     gh_object.set_euler_angles(aircondition, 0, 0, 0)
     gh_object.set_scale(aircondition, 1,  1,  1)
   
-    gh_object.compute_faces_normal(aircondition)
-    gh_object.compute_vertices_normal(aircondition)
   end  
   
 	grid = gh_utils.grid_create()
@@ -115,19 +109,34 @@ if (box > 0) then
 	gh_renderer.set_vsync(1)
 	
 	last_time = gh_utils.get_elapsed_time()
-  
- 
-		]]></raw_data>
-	</script> 
+  lightDegree = math.pi / 2 * 3
+  lightSource = { -5, 5, 0 }
+  lightLookAt = { 0, 0, 0 }
+		]]>
+    </raw_data>
+  </script>
 
-  
-	<script name="update_scene" run_mode="FRAME" >
-		<raw_data>
-    <![CDATA[	
+
+  <script name="update_scene" run_mode="FRAME" >
+    <raw_data>
+      <![CDATA[	
 
 		local elapsed_time = gh_utils.get_elapsed_time()
-local dt = elapsed_time - last_time
-last_time = elapsed_time
+  local dt = elapsed_time - last_time
+  last_time = elapsed_time
+
+  local KC_LEFT = 203
+  local KC_RIGHT = 205
+local is_down = gh_input.keyboard_is_key_down(KC_RIGHT)
+  if (is_down == 1) then
+    lightDegree = lightDegree + dt * 0.6
+  end
+  if (gh_input.keyboard_is_key_down(KC_LEFT) == 1) then
+    lightDegree = lightDegree - dt * 0.6
+    gh_utils.trace("L " .. lightSource[1] .. "," .. lightSource[3])
+  end
+ lightSource[1] = math.sin(lightDegree) * 5
+ lightSource[3] = math.cos(lightDegree) * 5
 
 		gx_camera.update(camera, dt)
 		gh_camera.bind(camera) 
@@ -139,7 +148,7 @@ last_time = elapsed_time
 	-- Bind vertex_color_prog to make it the active GPU program.
 	--
 	gh_gpu_program.bind(shader_prog)
-	gh_gpu_program.uniform4f(shader_prog, "lightSource", 1, 0.4, 0.8, 0) 
+	gh_gpu_program.uniform4f(shader_prog, "lightSource", lightLookAt[1] - lightSource[1], lightLookAt[2] - lightSource[2], lightLookAt[3] - lightSource[3], 0) 
   gh_gpu_program.uniform4f(shader_prog, "camera", gh_camera.get_view(camera)) 
 	 gh_gpu_program.uniform1i(shader_prog, "tex0", 0)
    
@@ -154,12 +163,14 @@ last_time = elapsed_time
 
 	gh_object.render(grid)
 
-		]]></raw_data>
-	</script> 
-	
+		]]>
+    </raw_data>
+  </script>
 
-	<script name="resize_scene" run_mode="SIZE" >
-		<raw_data><![CDATA[	
+
+  <script name="resize_scene" run_mode="SIZE" >
+    <raw_data>
+      <![CDATA[	
 
 		winW, winH = gh_window.getsize(0)
 
@@ -172,8 +183,9 @@ last_time = elapsed_time
 
 		gh_utils.font_set_viewport_info(font_a, 0, 0, winW, winH)
 
-		]]></raw_data>
-	</script> 
-  
+		]]>
+    </raw_data>
+  </script>
+
 </glsl_hacker>
 
