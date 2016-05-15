@@ -96,7 +96,7 @@ void main()
 
     float intensity = max(dot(n, normLightSource), 0.15);
     vec4 H = normalize(eye + normLightSource);
-	float specular = max(pow(dot(H, n), 200), 0) * 0.2;
+	float specular = max(pow(dot(H, n), 100), 0) * 0.3;
 
 	Out_Color = texture(tex0, TexCoord.xy) * intensity + specular;
 }

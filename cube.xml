@@ -41,7 +41,7 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
   if (model > 0) then
     gh_model.load_textures(model, model_directory)
     
-    model_norm_tex = gh_texture.create_from_file(model_directory .. "Metal_Normal.jpg", PF_U8_RGB, 1)
+    model_norm_tex = gh_texture.create_from_file_v2(model_directory .. "Metal_Normal.jpg", PF_U8_RGB, 1, 1)
     
     gh_object.set_materials_texture_unit_offset(model, 0)
 
@@ -53,7 +53,7 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
   if (street > 0) then
     gh_model.load_textures(street, model_directory)
     
-    street_norm_tex = gh_texture.create_from_file(model_directory .. "Roads0069_1_S_Normal.jpg", PF_U8_RGB, 1)
+    street_norm_tex = gh_texture.create_from_file_v2(model_directory .. "Roads0069_1_S_Normal.jpg", PF_U8_RGB, 1, 1)
     
     gh_object.set_materials_texture_unit_offset(street, 0)
 
@@ -68,7 +68,7 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
     gh_model.load_textures(sidewalk, model_directory)
     gh_object.set_materials_texture_unit_offset(sidewalk, 0)
     
-    sidewalk_norm_tex = gh_texture.create_from_file(model_directory .. "FloorStreets_Normal.jpg", PF_U8_RGB, 1)
+    sidewalk_norm_tex = gh_texture.create_from_file_v2(model_directory .. "FloorStreets_Normal.jpg", PF_U8_RGB, 1, 1)
 
     gh_object.set_position(sidewalk, 4, 0, 0)
     gh_object.set_euler_angles(sidewalk, 0, 0, 0)
@@ -80,7 +80,7 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
   if (wall > 0) then
     gh_model.load_textures(wall, model_directory)
     
-    wall_norm_tex = gh_texture.create_from_file(model_directory .. "BrickSmallBrown0257_1_S_Normal.jpg", PF_U8_RGB, 1)
+    wall_norm_tex = gh_texture.create_from_file_v2(model_directory .. "BrickSmallBrown0257_1_S_Normal.jpg", PF_U8_RGB, 1, 1)
     width, height, depth = gh_texture.get_size(wall_norm_tex)
     gh_utils.trace(width.. "," .. height .. "," .. depth)
     gh_object.set_materials_texture_unit_offset(wall, 0)
@@ -95,7 +95,7 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
 if (box > 0) then
     gh_model.load_textures(box, model_directory)
    
-    box_norm_tex = gh_texture.create_from_file(model_directory .. "WoodPlanks_Normal.jpg", PF_U8_RGB, 1)
+    box_norm_tex = gh_texture.create_from_file_v2(model_directory .. "WoodPlanks_Normal.jpg", PF_U8_RGB, 1, 1)
 
     gh_object.set_materials_texture_unit_offset(box, 0)
 
@@ -107,7 +107,7 @@ if (box > 0) then
   if (aircondition > 0) then
     gh_model.load_textures(aircondition, model_directory) 
     
-    aircondition_norm_tex = gh_texture.create_from_file(model_directory .. "AIRCONDITIONED_Normal.jpg", PF_U8_RGB, 1)
+    aircondition_norm_tex = gh_texture.create_from_file_v2(model_directory .. "AIRCONDITIONED_Normal.jpg", PF_U8_RGB, 1, 1)
 
     gh_object.set_materials_texture_unit_offset(aircondition, 0)
 
