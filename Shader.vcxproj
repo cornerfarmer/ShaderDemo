@@ -102,6 +102,7 @@
   <ItemGroup>
     <None Include="shader.glsl" />
     <None Include="shaderPerVertexLightning.glsl" />
+    <None Include="shader_shadowMap.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,5 +20,6 @@
   <ItemGroup>
     <None Include="shader.glsl" />
     <None Include="shaderPerVertexLightning.glsl" />
+    <None Include="shader_shadowMap.glsl" />
   </ItemGroup>
 </Project>
