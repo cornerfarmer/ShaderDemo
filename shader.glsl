@@ -75,9 +75,11 @@ out vec3 bitangent;
 #version 440
 
 uniform vec4 camera;
-uniform vec4 lightSource;
+uniform vec4 lightDir;
+uniform vec4 lightPos;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
+uniform sampler2D normTex;
 
 in vec4 normal;
 in vec3 tangent;
@@ -92,11 +94,14 @@ void main()
 	vec4 n = vec4(normalize(TBN * bump), 0);
 
 	vec4 eye = normalize(-camera);
-    vec4 normLightSource = -1 * normalize(lightSource);
+    vec4 normLightDir = -1 * normalize(lightDir);
 
-    float intensity = max(dot(n, normLightSource), 0.15);
-    vec4 H = normalize(eye + normLightSource);
+    float intensity = max(dot(n, normLightDir), 0.15);
+    vec4 H = normalize(eye + normLightDir);
 	float specular = max(pow(dot(H, n), 200), 0) * 0.2;
+
+
+
 
 	Out_Color = texture(tex0, TexCoord.xy) * intensity + specular;
 }

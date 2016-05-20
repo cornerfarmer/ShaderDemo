@@ -117,9 +117,6 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
   
   end  
   
-  
-	grid = gh_utils.grid_create()
-    gh_utils.grid_set_geometry_params(grid, 10, 10, 20, 20)
 	
 	shader_prog = gh_gpu_program.create_from_file("shader.glsl", 0)
 	gh_node.set_name(shader_prog, "shader_prog") 
@@ -131,16 +128,15 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
   shadowMap_w = 2048
   shadowMap_h = 2048
   shadowMap = gh_render_target.create(shadowMap_w, shadowMap_h)
+  
+  lightDegree = math.pi / 2 * 3
+  lightSource = { -10, 10, 0 }
+  lightLookAt = { 0, 0, 0 }
+
+  camera_light = gx_camera.create_perspective(90, 1, 0, 0, shadowMap_w, shadowMap_h, 0.1, 1000)
+	 gx_camera.init_orientation(camera_light, lightLookAt[1], lightLookAt[2], lightLookAt[3], 20, 170)
 	
 	last_time = gh_utils.get_elapsed_time()
-  lightDegree = math.pi / 2 * 3
-  lightSource = { -5, 5, 0 }
-  lightLookAt = { 0, 0, 0 }
-  
-  
-  
-
-
 
   camera_ortho = gh_camera.create_ortho(-winW/2, winW/2, -winH/2, winH/2, 1.0, 10.0)
   gh_camera.set_viewport(camera_ortho, 0, 0, winW, winH)
@@ -174,21 +170,27 @@ local is_down = gh_input.keyboard_is_key_down(KC_RIGHT)
     lightDegree = lightDegree - dt * 0.6
     gh_utils.trace("L " .. lightSource[1] .. "," .. lightSource[3])
   end
- lightSource[1] = math.sin(lightDegree) * 5
- lightSource[3] = math.cos(lightDegree) * 5
+ lightSource[1] = math.sin(lightDegree) * 10
+ lightSource[3] = math.cos(lightDegree) * 10
 
+gh_camera.set_position(camera_light, lightSource[1], lightSource[2], lightSource[3]) 
+ gh_camera.set_lookat(camera_light, lightLookAt[1], lightLookAt[2], lightLookAt[3], 1)
 	gx_camera.update(camera, dt)
 	
   
    gh_render_target.bind(shadowMap)
-   gh_camera.bind(camera)
+   gh_camera.bind(camera_light)
    
    gh_renderer.clear_color_depth_buffers(0.2, 0.2, 0.2, 1.0, 1.0)
   gh_renderer.set_depth_test_state(1)
   
   gh_gpu_program.bind(shader_shadowMap)
+  gh_object.render(model)
+  gh_object.render(street)
+  gh_object.render(sidewalk)
   gh_object.render(wall)
   gh_object.render(box)
+  gh_object.render(aircondition)
   gh_gpu_program.bind(0)
   
   gh_render_target.unbind(shadowMap)
@@ -199,7 +201,8 @@ local is_down = gh_input.keyboard_is_key_down(KC_RIGHT)
 
 	gh_camera.bind(camera) 
 	gh_gpu_program.bind(shader_prog)
-	gh_gpu_program.uniform4f(shader_prog, "lightSource", lightLookAt[1] - lightSource[1], lightLookAt[2] - lightSource[2], lightLookAt[3] - lightSource[3], 0) 
+	gh_gpu_program.uniform4f(shader_prog, "lightDir", lightLookAt[1] - lightSource[1], lightLookAt[2] - lightSource[2], lightLookAt[3] - lightSource[3], 0) 
+  gh_gpu_program.uniform4f(shader_prog, "lightPos", lightSource[1], lightSource[2], lightSource[3], 0) 
   gh_gpu_program.uniform4f(shader_prog, "camera", gh_camera.get_view(camera)) 
 	gh_gpu_program.uniform1i(shader_prog, "tex0", 0)
   gh_gpu_program.uniform1i(shader_prog, "tex1", 1)
@@ -218,9 +221,6 @@ local is_down = gh_input.keyboard_is_key_down(KC_RIGHT)
   gh_object.render(box)
   gh_texture.bind(aircondition_norm_tex, 1)
   gh_object.render(aircondition)
-
-	gh_object.render(grid)
-  
   
   
   gh_renderer.set_depth_test_state(0)
