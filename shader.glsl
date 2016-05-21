@@ -105,7 +105,7 @@ void main()
 	vec4 eye = normalize(-camera);
     vec4 normLightDir = -1 * normalize(lightDir);
 
-    float intensity = max(dot(n, normLightDir), 0.15);
+    float intensity = dot(n, normLightDir);
     vec4 H = normalize(eye + normLightDir);
 	float specular = max(pow(dot(H, n), 200), 0) * 0.2;
 
@@ -113,8 +113,9 @@ void main()
 	float realDistance = posInLightSpace.z / 50;
 	float visibility = 1.0;
 	float bias = 0.005;
+	bias = clamp(bias, 0,0.01);
 	if (storedDistance < realDistance - bias)
 		visibility = 0.3;
-	Out_Color = (texture(tex0, TexCoord.xy) * intensity + specular) * visibility;
+	Out_Color = max((texture(tex0, TexCoord.xy) * intensity + specular) * visibility, texture(tex0, TexCoord.xy) * 0.15);
 }
 

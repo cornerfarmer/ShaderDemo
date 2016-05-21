@@ -125,8 +125,8 @@ gh_model.set_current_3d_obj_loader("ObjLoaderV2")
 	gh_node.set_name(shader_shadowMap, "shader_shadowMap") 
 	
 	gh_renderer.set_vsync(1)
-  shadowMap_w = 2048
-  shadowMap_h = 2048
+  shadowMap_w = 4096
+  shadowMap_h = 4096
   shadowMap = gh_render_target.create(shadowMap_w, shadowMap_h)
   
   lightDegree = math.pi / 2 * 3
