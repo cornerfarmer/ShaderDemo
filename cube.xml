@@ -204,8 +204,11 @@ gh_camera.set_position(camera_light, lightSource[1], lightSource[2], lightSource
 	gh_gpu_program.uniform4f(shader_prog, "lightDir", lightLookAt[1] - lightSource[1], lightLookAt[2] - lightSource[2], lightLookAt[3] - lightSource[3], 0) 
   gh_gpu_program.uniform4f(shader_prog, "lightPos", lightSource[1], lightSource[2], lightSource[3], 0) 
   gh_gpu_program.uniform4f(shader_prog, "camera", gh_camera.get_view(camera)) 
+  gh_gpu_program.uniform_camera_matrices(shader_prog, camera_light, "lightViewMatrix", "lightProjectionMatrix")
 	gh_gpu_program.uniform1i(shader_prog, "tex0", 0)
   gh_gpu_program.uniform1i(shader_prog, "tex1", 1)
+  gh_gpu_program.uniform1i(shader_prog, "shadowMap", 2)
+  gh_texture.rt_color_bind(shadowMap, 2)
    
 	-- Render the triangle and the grid
 	--

@@ -10,9 +10,12 @@ in vec4 gxl3d_TexCoord0;
 uniform mat4 gxl3d_ModelViewProjectionMatrix;
 uniform mat4 gxl3d_ModelViewMatrix;
 uniform mat4 gxl3d_ModelMatrix;
+uniform mat4 lightProjectionMatrix;
+uniform mat4 lightViewMatrix;
 out vec4 vNormal;
 out vec4 vOrgPosition;
 out vec4 vTexCoord;
+out vec4 vPosInLightSpace;
 void main()
 {
     vNormal = gxl3d_ModelMatrix * gxl3d_Normal;
@@ -20,6 +23,7 @@ void main()
     gl_Position = gxl3d_ModelViewProjectionMatrix * gxl3d_Position;
 	vTexCoord = gxl3d_TexCoord0;
 	vOrgPosition = gxl3d_ModelMatrix * gxl3d_Position;
+	vPosInLightSpace = lightProjectionMatrix*lightViewMatrix *gxl3d_ModelMatrix * gxl3d_Position;
 }
 
 [Geometry_Shader]
@@ -31,11 +35,13 @@ layout (triangle_strip, max_vertices=3) out;
 in vec4 vNormal[3];
 in vec4 vTexCoord[3];
 in vec4 vOrgPosition[3];
- 
+in vec4 vPosInLightSpace[3];
+
 out vec4 normal;
 out vec3 tangent;
 out vec4 TexCoord;
 out vec3 bitangent;
+out vec4 posInLightSpace;
 
  void main()
 {
@@ -65,6 +71,7 @@ out vec3 bitangent;
     TexCoord = vTexCoord[i];
 	tangent = ptangent;
 	bitangent = pbitangent;
+	posInLightSpace = vPosInLightSpace[i];
  
     // done with the vertex
     EmitVertex();
@@ -80,11 +87,13 @@ uniform vec4 lightPos;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
 uniform sampler2D normTex;
+uniform sampler2D shadowMap;
 
 in vec4 normal;
 in vec3 tangent;
 in vec4 TexCoord;
 in vec3 bitangent;
+in vec4 posInLightSpace;
 out vec4 Out_Color;
 void main()
 {
@@ -100,9 +109,12 @@ void main()
     vec4 H = normalize(eye + normLightDir);
 	float specular = max(pow(dot(H, n), 200), 0) * 0.2;
 
-
-
-
-	Out_Color = texture(tex0, TexCoord.xy) * intensity + specular;
+	float storedDistance = texture(shadowMap, posInLightSpace.xy / posInLightSpace.w / 2.0 + 0.5).x;
+	float realDistance = posInLightSpace.z / 50;
+	float visibility = 1.0;
+	float bias = 0.005;
+	if (storedDistance < realDistance - bias)
+		visibility = 0.3;
+	Out_Color = (texture(tex0, TexCoord.xy) * intensity + specular) * visibility;
 }
 
