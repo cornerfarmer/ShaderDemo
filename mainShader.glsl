@@ -98,7 +98,7 @@ void main()
 {
 	// Precomputations
 	vec4 eye = normalize(-camera);
-	vec4 normLightDir = -1 * normalize(lightDir);
+	vec4 normLightDir = normalize(lightDir);
 
 	vec4 n;
 	if (graphicsMode >= 4) {
@@ -111,10 +111,10 @@ void main()
 	}
 
 	// Diffuse ligtning
-	float intensity = dot(n, normLightDir);
+	float intensity = -1 * dot(n, normLightDir);
 
 	// Speculat lightning
-	vec4 H = normalize(eye + normLightDir);
+	vec4 H = normalize(eye - normLightDir);
 	float specular = max(pow(dot(H, n), 200), 0) * 0.2;
 
 	// Shadow mapping

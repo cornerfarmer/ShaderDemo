@@ -8,7 +8,7 @@ uniform mat4 gxl3d_ModelViewProjectionMatrix;
 out vec4 position;
 void main()
 {
-    position= gxl3d_ModelViewProjectionMatrix * gxl3d_Position;
+    position = gxl3d_ModelViewProjectionMatrix * gxl3d_Position;
 	gl_Position  = position;
 }
 
