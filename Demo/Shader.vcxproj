@@ -97,17 +97,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Xml Include="cube.xml">
-      <SubType>Designer</SubType>
-    </Xml>
+    <None Include="Scripts\init.lua" />
+    <None Include="Scripts\resize.lua" />
+    <None Include="Scripts\update.lua" />
+    <None Include="Shader\mainShader.glsl" />
+    <None Include="Shader\shaderShadowMap.glsl" />
+    <None Include="Shader\shaderShadowMapViewer.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="init.lua" />
-    <None Include="resize.lua" />
-    <None Include="mainShader.glsl" />
-    <None Include="shaderShadowMap.glsl" />
-    <None Include="shaderShadowMapViewer.glsl" />
-    <None Include="update.lua" />
+    <Xml Include="main.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

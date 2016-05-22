@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+
+<glsl_hacker>
+
+  <window name="cube" title="Cube"
+          width="1920" height="1080"
+          gl_version_major="2" gl_version_minor="1" />
+
+  <script name="init_scene" filename="Scripts/init.lua" run_mode="INIT" />
+
+  <script name="update_scene" filename="Scripts/update.lua" run_mode="FRAME" />
+
+  <script name="resize_scene" filename="Scripts/resize.lua" run_mode="SIZE" />
+
+</glsl_hacker>
+
