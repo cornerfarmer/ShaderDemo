@@ -84,6 +84,7 @@ out vec4 posInLightSpace;
 uniform vec4 camera;
 uniform vec4 lightDir;
 uniform vec4 lightPos;
+uniform float lightPower;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
 uniform sampler2D normTex;
@@ -113,9 +114,8 @@ void main()
 	float realDistance = posInLightSpace.z / 50;
 	float visibility = 1.0;
 	float bias = 0.005;
-	bias = clamp(bias, 0,0.01);
 	if (storedDistance < realDistance - bias)
-		visibility = 0.3;
-	Out_Color = max((texture(tex0, TexCoord.xy) * intensity + specular) * visibility, texture(tex0, TexCoord.xy) * 0.15);
+		visibility = 0.4;
+	Out_Color = max((texture(tex0, TexCoord.xy) * intensity * lightPower + specular) * visibility, texture(tex0, TexCoord.xy) * 0.15);
 }
 
