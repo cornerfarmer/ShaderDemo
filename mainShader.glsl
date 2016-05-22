@@ -91,6 +91,7 @@ uniform sampler2D tex0;
 uniform sampler2D tex1;
 uniform sampler2D normTex;
 uniform sampler2D shadowMap;
+uniform int graphicsMode;
 // Outputs
 out vec4 Out_Color;
 void main()
@@ -99,10 +100,15 @@ void main()
 	vec4 eye = normalize(-camera);
 	vec4 normLightDir = -1 * normalize(lightDir);
 
-	// Normalmapping
-	vec3 bump = texture(tex1, TexCoord.xy).xyz * 2 - vec3(1);
-	mat3 TBN = mat3(normalize(tangent), normalize(bitangent), normalize(normal.xyz));
-	vec4 n = vec4(normalize(TBN * bump), 0);
+	vec4 n;
+	if (graphicsMode >= 4) {
+		// Normalmapping
+		vec3 bump = texture(tex1, TexCoord.xy).xyz * 2 - vec3(1);
+		mat3 TBN = mat3(normalize(tangent), normalize(bitangent), normalize(normal.xyz));
+		n = vec4(normalize(TBN * bump), 0);
+	} else {
+		n = normalize(normal);
+	}
 
 	// Diffuse ligtning
 	float intensity = dot(n, normLightDir);
@@ -120,7 +126,20 @@ void main()
 		visibility = 0.4;
 
 	// Combine results
-	Out_Color = max((texture(tex0, TexCoord.xy) * intensity * lightPower + specular) * visibility, texture(tex0, TexCoord.xy) * 0.15);
+	if (graphicsMode == 1)
+		Out_Color = vec4(0.5);
+	if (graphicsMode >= 2)
+		Out_Color = texture(tex0, TexCoord.xy);
+	if (graphicsMode >= 3)
+		Out_Color *= intensity;
+	if (graphicsMode >= 4)
+		Out_Color *= lightPower;
+	if (graphicsMode >= 6)
+		Out_Color += specular;
+	if (graphicsMode >= 7)
+		Out_Color *= visibility;
+	if (graphicsMode >= 5)
+		Out_Color = max(Out_Color, texture(tex0, TexCoord.xy) * 0.15);
 }
 
 

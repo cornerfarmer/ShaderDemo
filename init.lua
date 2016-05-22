@@ -8,6 +8,8 @@ dofile(lib_dir .. "lua/gx_cam_lib_v1.lua")
 -- Build absolute paths
 local demo_dir = gh_utils.get_scenegraph_dir()
 local model_directory = demo_dir .. "Assets/"
+-- Set loader to v2
+gh_model.set_current_3d_obj_loader("ObjLoaderV2")
 
 -- Load the lamppost
 model = gh_model.create_from_file_loader_obj("Lamppost.obj", model_directory, model_directory)
@@ -136,3 +138,5 @@ gh_camera.set_position(camera_ortho, 0, 0, 2)
 -- +++++++++++++++ Other render options +++++++++++++++
 gh_renderer.set_vsync(1)
 last_time = gh_utils.get_elapsed_time()
+graphicsMode = 1
+showShadowMap = false

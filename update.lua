@@ -7,6 +7,16 @@ last_time = elapsed_time
 -- +++++++++++++++ Handle input +++++++++++++++
 local KC_LEFT = 203
 local KC_RIGHT = 205
+local KC_1 =  2
+local KC_2 =  3
+local KC_3 =  4
+local KC_4 =  5
+local KC_5 =  6
+local KC_6 =  7
+local KC_7 =  8
+local KC_N =  49
+local KC_M =  50
+
 -- Move light
 if (gh_input.keyboard_is_key_down(KC_RIGHT) == 1) then
 	lightDegree = lightDegree + dt * 0.6
@@ -18,6 +28,36 @@ lightSource[1] = math.sin(lightDegree) * 10
 lightSource[3] = math.cos(lightDegree) * 10
 -- Update main camera
 gx_camera.update(camera, dt)
+-- Set graphicsMode
+if (gh_input.keyboard_is_key_down(KC_1) == 1) then
+	graphicsMode = 1
+end
+if (gh_input.keyboard_is_key_down(KC_2) == 1) then
+	graphicsMode = 2
+end
+if (gh_input.keyboard_is_key_down(KC_3) == 1) then
+	graphicsMode = 3
+end
+if (gh_input.keyboard_is_key_down(KC_4) == 1) then
+	graphicsMode = 4
+end
+if (gh_input.keyboard_is_key_down(KC_5) == 1) then
+	graphicsMode = 5
+end
+if (gh_input.keyboard_is_key_down(KC_6) == 1) then
+	graphicsMode = 6
+end
+if (gh_input.keyboard_is_key_down(KC_7) == 1) then
+	graphicsMode = 7
+end
+-- Show shadowMap?
+if (gh_input.keyboard_is_key_down(KC_M) == 1) then
+	showShadowMap = true
+end
+if (gh_input.keyboard_is_key_down(KC_N) == 1) then
+	showShadowMap = false
+end
+
 
 -- Set light camera from light position
 gh_camera.set_position(camera_light, lightSource[1], lightSource[2], lightSource[3])
@@ -66,6 +106,8 @@ gh_gpu_program.uniform4f(shaderMain, "camera", gh_camera.get_view(camera))
 gh_gpu_program.uniform1i(shaderMain, "tex0", 0)
 gh_gpu_program.uniform1i(shaderMain, "tex1", 1)
 gh_gpu_program.uniform1i(shaderMain, "shadowMap", 2)
+-- Set graphicsMode
+gh_gpu_program.uniform1i(shaderMain, "graphicsMode", graphicsMode)
 
 -- Bind shadow map
 gh_texture.rt_color_bind(shadowMap, 2)
@@ -84,17 +126,19 @@ gh_object.render(box)
 gh_texture.bind(aircondition_norm_tex, 1)
 gh_object.render(aircondition)
 
--- +++++++++++++++ Render shadow map to screen +++++++++++++++
-gh_renderer.set_depth_test_state(0)
+if (showShadowMap) then
+	-- +++++++++++++++ Render shadow map to screen +++++++++++++++
+	gh_renderer.set_depth_test_state(0)
 
--- Bindings
-gh_gpu_program.bind(shaderShadowMapViewer)
-gh_camera.bind(camera_ortho)
+	-- Bindings
+	gh_gpu_program.bind(shaderShadowMapViewer)
+	gh_camera.bind(camera_ortho)
 
--- Set shadow map
-gh_gpu_program.uniform1i(shaderShadowMapViewer, "tex0", 0)
-gh_texture.rt_color_bind(shadowMap, 0)
+	-- Set shadow map
+	gh_gpu_program.uniform1i(shaderShadowMapViewer, "tex0", 0)
+	gh_texture.rt_color_bind(shadowMap, 0)
 
--- Render fullscreen squad into the upper right corner
-gh_object.set_position(fullscreen_quad, winW / 2 - 400 - 10, winH / 2 - 300 - 60, 0)
-gh_object.render(fullscreen_quad)
+	-- Render fullscreen squad into the upper right corner
+	gh_object.set_position(fullscreen_quad, winW / 2 - 400 - 10, winH / 2 - 300 - 60, 0)
+	gh_object.render(fullscreen_quad)
+end
