@@ -94,14 +94,14 @@ fullscreen_quad = gh_mesh.create_quad(800, 600)
   
 -- +++++++++++++++ Load shaders +++++++++++++++
 -- Main scene
-shader_prog = gh_gpu_program.create_from_file("shader.glsl", 0)
-gh_node.set_name(shader_prog, "shader_prog")
+shaderMain = gh_gpu_program.create_from_file("mainShader.glsl", 0)
+gh_node.set_name(shaderMain, "shaderMain")
 -- Shadow map
-shader_shadowMap = gh_gpu_program.create_from_file("shader_shadowMap.glsl", 0)
-gh_node.set_name(shader_shadowMap, "shader_shadowMap")
+shaderShadowMap = gh_gpu_program.create_from_file("shaderShadowMap.glsl", 0)
+gh_node.set_name(shaderShadowMap, "shaderShadowMap")
 -- Shadow map viewer
-shadowmap_viewer_prog = gh_gpu_program.create_from_file("shadowmap_viewer.glsl", 0)
-gh_node.set_name(shadowmap_viewer_prog, "shadowmap_viewer_prog")
+shaderShadowMapViewer = gh_gpu_program.create_from_file("shaderShadowMapViewer.glsl", 0)
+gh_node.set_name(shaderShadowMapViewer, "shaderShadowMapViewer")
 
 -- +++++++++++++++ Create render target +++++++++++++++
 shadowMap_w = 4096

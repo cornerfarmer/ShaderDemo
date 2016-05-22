@@ -104,9 +104,9 @@
   <ItemGroup>
     <None Include="init.lua" />
     <None Include="resize.lua" />
-    <None Include="shader.glsl" />
-    <None Include="shaderPerVertexLightning.glsl" />
-    <None Include="shader_shadowMap.glsl" />
+    <None Include="mainShader.glsl" />
+    <None Include="shaderShadowMap.glsl" />
+    <None Include="shaderShadowMapViewer.glsl" />
     <None Include="update.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

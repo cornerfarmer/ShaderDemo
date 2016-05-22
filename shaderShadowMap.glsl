@@ -1,24 +1,26 @@
 [Vertex_Shader]
 #version 440
+// Inputs
 in vec4 gxl3d_Position;
-
+// Const inputs
 uniform mat4 gxl3d_ModelViewProjectionMatrix;
+// Outputs
 out vec4 position;
 void main()
 {
-    gl_Position = gxl3d_ModelViewProjectionMatrix * gxl3d_Position;
-	position = gl_Position;
+    position= gxl3d_ModelViewProjectionMatrix * gxl3d_Position;
+	gl_Position  = position;
 }
 
 [Pixel_Shader]
 #version 440
+// Inputs
 in vec4 position;
+// Outputs
 out vec4 Out_Color;
 void main()
 {
-	float f = 50.0;
-	float n = 0.1;
-	float z = (2 * n) / (f + n - gl_FragCoord.z * (f - n));
+	// Just render the depth value
 	Out_Color = vec4(position.z / 50.0);
 }
 
