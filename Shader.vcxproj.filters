@@ -21,5 +21,8 @@
     <None Include="shader.glsl" />
     <None Include="shaderPerVertexLightning.glsl" />
     <None Include="shader_shadowMap.glsl" />
+    <None Include="init.lua" />
+    <None Include="update.lua" />
+    <None Include="resize.lua" />
   </ItemGroup>
 </Project>
