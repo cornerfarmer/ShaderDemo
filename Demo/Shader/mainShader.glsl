@@ -92,12 +92,14 @@ uniform sampler2D tex1;
 uniform sampler2D normTex;
 uniform sampler2D shadowMap;
 uniform int graphicsMode;
+uniform float materialSpecular;
+uniform float materialShininess;
 // Outputs
 out vec4 Out_Color;
 void main()
 {
 	// Precomputations
-	vec4 eye = normalize(-camera);
+	vec4 normCamera = normalize(camera);
 	vec4 normLightDir = normalize(lightDir);
 
 	vec4 n;
@@ -113,9 +115,9 @@ void main()
 	// Diffuse ligtning
 	float intensity = -1 * dot(n, normLightDir);
 
-	// Speculat lightning
-	vec4 H = reflect(normLightDir, n);
-	float specular = max(pow(dot(H, eye), 20), 0) * 0.3;
+	// Specular lightning
+	vec4 R = reflect(normLightDir, n);
+	float specular = max(pow(-1 * dot(R, normCamera), materialShininess), 0) * materialSpecular;
 
 	// Shadow mapping
 	float storedDistance = texture(shadowMap, posInLightSpace.xy / posInLightSpace.w / 2.0 + 0.5).x;

@@ -113,8 +113,15 @@ gh_gpu_program.uniform1i(shaderMain, "graphicsMode", graphicsMode)
 gh_texture.rt_color_bind(shadowMap, 2)
    
 -- Render models with normal maps
+gh_gpu_program.uniform1f(shaderMain, "materialShininess", 20)
+gh_gpu_program.uniform1f(shaderMain, "materialSpecular", 0.3)
 gh_texture.bind(model_norm_tex, 1)
 gh_object.render(model)
+gh_gpu_program.uniform1f(shaderMain, "materialSpecular", 0.6)
+gh_texture.bind(aircondition_norm_tex, 1)
+gh_object.render(aircondition)
+gh_gpu_program.uniform1f(shaderMain, "materialShininess", 4)
+gh_gpu_program.uniform1f(shaderMain, "materialSpecular", 0.08)
 gh_texture.bind(street_norm_tex, 1)
 gh_object.render(street)
 gh_texture.bind(sidewalk_norm_tex, 1)
@@ -123,8 +130,7 @@ gh_texture.bind(wall_norm_tex, 1)
 gh_object.render(wall)
 gh_texture.bind(box_norm_tex, 1)
 gh_object.render(box)
-gh_texture.bind(aircondition_norm_tex, 1)
-gh_object.render(aircondition)
+
 
 if (showShadowMap) then
 	-- +++++++++++++++ Render shadow map to screen +++++++++++++++
