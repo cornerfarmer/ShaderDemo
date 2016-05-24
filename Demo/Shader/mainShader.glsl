@@ -114,8 +114,8 @@ void main()
 	float intensity = -1 * dot(n, normLightDir);
 
 	// Speculat lightning
-	vec4 H = normalize(eye - normLightDir);
-	float specular = max(pow(dot(H, n), 200), 0) * 0.2;
+	vec4 H = reflect(normLightDir, n);
+	float specular = max(pow(dot(H, eye), 20), 0) * 0.3;
 
 	// Shadow mapping
 	float storedDistance = texture(shadowMap, posInLightSpace.xy / posInLightSpace.w / 2.0 + 0.5).x;
