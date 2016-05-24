@@ -106,8 +106,7 @@ void main()
 	if (graphicsMode >= 4) {
 		// Normalmapping
 		vec3 bump = texture(tex1, TexCoord.xy).xyz * 2 - vec3(1);
-		mat3 TBN = mat3(normalize(tangent), normalize(bitangent), normalize(normal.xyz));
-		n = vec4(normalize(TBN * bump), 0);
+		n = vec4(normalize(normalize(tangent) * bump.x + normalize(bitangent) * bump.y + normalize(normal.xyz) * bump.z), 0);
 	} else {
 		n = normalize(normal);
 	}
