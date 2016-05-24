@@ -68,13 +68,14 @@ gh_camera.set_lookat(camera_light, lightLookAt[1], lightLookAt[2], lightLookAt[3
 gh_render_target.bind(shadowMap)
 gh_camera.bind(camera_light)
 gh_gpu_program.bind(shaderShadowMap)
+gh_renderer.set_blending_state(0)
 
 -- Clear
 gh_renderer.clear_color_depth_buffers(0.2, 0.2, 0.2, 1.0, 1.0)
 gh_renderer.set_depth_test_state(1)
 
 -- Render models
-gh_object.render(model)
+gh_object.render(lamppost)
 gh_object.render(street)
 gh_object.render(sidewalk)
 gh_object.render(wall)
@@ -85,10 +86,15 @@ gh_object.render(aircondition)
 gh_gpu_program.bind(0)
 gh_render_target.unbind(shadowMap)
 
+
 -- +++++++++++++++ Render shadowed scene +++++++++++++++
 -- Clear
 gh_renderer.clear_color_depth_buffers(0.2, 0.2, 0.2, 1.0, 1.0)
 gh_renderer.set_depth_test_state(1)
+
+-- AlphaBlending
+gh_renderer.set_blending_factors(1, 5)
+gh_renderer.set_blending_state(1)
 
 -- Bindings
 gh_camera.bind(camera)
@@ -115,8 +121,12 @@ gh_texture.rt_color_bind(shadowMap, 2)
 -- Render models with normal maps
 gh_gpu_program.uniform1f(shaderMain, "materialShininess", 20)
 gh_gpu_program.uniform1f(shaderMain, "materialSpecular", 0.3)
-gh_texture.bind(model_norm_tex, 1)
-gh_object.render(model)
+gh_texture.bind(lamppost_norm_tex, 1)
+gh_object.render(lamppost)
+gh_texture.bind(lamppostGlas_tex, 1)
+gh_gpu_program.uniform1i(shaderMain, "graphicsMode", math.min(3, graphicsMode))
+gh_object.render(lamppostGlas)
+gh_gpu_program.uniform1i(shaderMain, "graphicsMode", graphicsMode)
 gh_gpu_program.uniform1f(shaderMain, "materialSpecular", 0.6)
 gh_texture.bind(aircondition_norm_tex, 1)
 gh_object.render(aircondition)
@@ -135,6 +145,7 @@ gh_object.render(box)
 if (showShadowMap) then
 	-- +++++++++++++++ Render shadow map to screen +++++++++++++++
 	gh_renderer.set_depth_test_state(0)
+    gh_renderer.set_blending_state(0)
 
 	-- Bindings
 	gh_gpu_program.bind(shaderShadowMapViewer)

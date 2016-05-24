@@ -89,7 +89,6 @@ uniform vec4 lightPos;
 uniform float lightPower;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
-uniform sampler2D normTex;
 uniform sampler2D shadowMap;
 uniform int graphicsMode;
 uniform float materialSpecular;
@@ -141,6 +140,11 @@ void main()
 		Out_Color *= visibility;
 	if (graphicsMode >= 5)
 		Out_Color = max(Out_Color, texture(tex0, TexCoord.xy) * 0.15);
+	// Alphablending
+	if (graphicsMode >= 2)
+		Out_Color.a = texture(tex1, TexCoord.xy).a;
+	else
+		Out_Color.a = 1;
 }
 
 

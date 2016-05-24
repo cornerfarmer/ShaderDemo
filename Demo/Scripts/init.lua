@@ -12,15 +12,27 @@ local model_directory = demo_dir .. "Assets/"
 gh_model.set_current_3d_obj_loader("ObjLoaderV2")
 
 -- Load the lamppost
-model = gh_model.create_from_file_loader_obj("Lamppost.obj", model_directory, model_directory)
-if (model > 0) then
+lamppost = gh_model.create_from_file_loader_obj("Lamppost.obj", model_directory, model_directory)
+if (lamppost > 0) then
 	-- Textures
-	gh_model.load_textures(model, model_directory)
-	model_norm_tex = gh_texture.create_from_file_v2(model_directory .. "Metal_Normal.jpg", PF_U8_RGB, 1, 1)
+	gh_model.load_textures(lamppost, model_directory)
+	lamppost_norm_tex = gh_texture.create_from_file_v2(model_directory .. "Metal_Normal.jpg", PF_U8_RGB, 1, 1)
 	-- Translate, rotate and scale
-	gh_object.set_position(model, 2.5, 0.2, 0)
-	gh_object.set_euler_angles(model, 0, 0, 0)
-	gh_object.set_scale(model, 1, 1, 1)
+	gh_object.set_position(lamppost, 2.5, 0.2, 0)
+	gh_object.set_euler_angles(lamppost, 0, 0, 0)
+	gh_object.set_scale(lamppost, 1, 1, 1)
+end  
+
+-- Load the lamppost glas
+lamppostGlas = gh_model.create_from_file_loader_obj("LamppostGlas.obj", model_directory, model_directory)
+if (lamppostGlas > 0) then
+	-- Textures
+	gh_model.load_textures(lamppostGlas, model_directory)
+	lamppostGlas_tex = gh_texture.create_from_file_v2(model_directory .. "Glas.png", 3, 1, 1)
+	-- Translate, rotate and scale
+	gh_object.set_position(lamppostGlas, 2.5, 0.2, 0)
+	gh_object.set_euler_angles(lamppostGlas, 0, 0, 0)
+	gh_object.set_scale(lamppostGlas, 1, 1, 1)
 end  
 
 -- Load the street
