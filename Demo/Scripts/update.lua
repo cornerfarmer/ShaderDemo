@@ -16,6 +16,7 @@ local KC_6 =  7
 local KC_7 =  8
 local KC_N =  49
 local KC_M =  50
+local KC_SPACE = 57
 
 -- Move light
 if (gh_input.keyboard_is_key_down(KC_RIGHT) == 1) then
@@ -57,11 +58,19 @@ end
 if (gh_input.keyboard_is_key_down(KC_N) == 1) then
 	showShadowMap = false
 end
+if (gh_input.keyboard_is_key_down(KC_SPACE) == 1 and not pausedPressed) then
+	paused = not paused
+	pausedPressed = true
+else
+	pausedPressed = false
+end
 
 
 -- Set light camera from light position
 gh_camera.set_position(camera_light, lightSource[1], lightSource[2], lightSource[3])
 gh_camera.set_lookat(camera_light, lightLookAt[1], lightLookAt[2], lightLookAt[3], 1)
+
+if not paused then
 
 -- +++++++++++++++ Render shadow map +++++++++++++++
 -- Render to a texture
@@ -158,4 +167,6 @@ if (showShadowMap) then
 	-- Render fullscreen squad into the upper right corner
 	gh_object.set_position(fullscreen_quad, winW / 2 - 400 - 10, winH / 2 - 300 - 60, 0)
 	gh_object.render(fullscreen_quad)
+end
+
 end

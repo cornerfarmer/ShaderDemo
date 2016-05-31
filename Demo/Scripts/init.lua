@@ -152,3 +152,5 @@ gh_renderer.set_vsync(1)
 last_time = gh_utils.get_elapsed_time()
 graphicsMode = 1
 showShadowMap = false
+paused = false
+pausedPressed = false
